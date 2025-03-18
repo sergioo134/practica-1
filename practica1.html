@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Operaciones</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #4CAF50;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        input[type="number"], input[type="text"], select {
+            padding: 10px;
+            width: 100%;
+            margin: 5px 0 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .section {
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Calculadora de Operaciones Básicas</h1>
+        
+        <!-- Operaciones simples -->
+        <div class="section">
+            <h2>Operaciones Simples</h2>
+            <label for="num1">Primer número:</label>
+            <input type="number" id="num1" placeholder="Ingresa un número" />
+
+            <label for="num2">Segundo número:</label>
+            <input type="number" id="num2" placeholder="Ingresa un número" />
+
+            <label for="operation">Operación:</label>
+            <select id="operation">
+                <option value="add">Suma</option>
+                <option value="subtract">Resta</option>
+                <option value="multiply">Multiplicación</option>
+                <option value="divide">División</option>
+            </select>
+
+            <button onclick="calculateSimple()">Calcular</button>
+
+            <div class="result" id="resultSimple"></div>
+        </div>
+
+        <!-- Operaciones con expresiones -->
+        <div class="section">
+            <h2>Operaciones Avanzadas</h2>
+            <label for="expression">Expresión Matemática:</label>
+            <input type="text" id="expression" placeholder="Ejemplo: 3 + 5 * 2" />
+
+            <button onclick="calculateAdvanced()">Calcular</button>
+
+            <div class="result" id="resultAdvanced"></div>
+        </div>
+    </div>
+
+    <script>
+        // Función para operaciones simples (suma, resta, multiplicación, división)
+        function calculateSimple() {
+            const num1 = parseFloat(document.getElementById('num1').value);
+            const num2 = parseFloat(document.getElementById('num2').value);
+            const operation = document.getElementById('operation').value;
+            let result = '';
+            let error = false;
+
+            if (isNaN(num1) || isNaN(num2)) {
+                result = 'Por favor, ingresa ambos números.';
+                error = true;
+            } else {
+                switch (operation) {
+                    case 'add':
+                        result = `Resultado: ${num1 + num2}`;
+                        break;
+                    case 'subtract':
+                        result = `Resultado: ${num1 - num2}`;
+                        break;
+                    case 'multiply':
+                        result = `Resultado: ${num1 * num2}`;
+                        break;
+                    case 'divide':
+                        if (num2 === 0) {
+                            result = 'Error: No se puede dividir entre cero.';
+                            error = true;
+                        } else {
+                            result = `Resultado: ${num1 / num2}`;
+                        }
+                        break;
+                    default:
+                        result = 'Operación no válida';
+                        error = true;
+                }
+            }
+
+            const resultElement = document.getElementById('resultSimple');
+            resultElement.textContent = result;
+            resultElement.classList.toggle('error', error);
+        }
+
+        // Función para operaciones avanzadas (con jerarquía de operaciones)
+        function calculateAdvanced() {
+            const expression = document.getElementById('expression').value;
+            const resultElement = document.getElementById('resultAdvanced');
+            let result = '';
+            let error = false;
+
+            try {
+                // Evaluamos la expresión matemática respetando el orden de operaciones
+                result = eval(expression);
+                if (isNaN(result)) {
+                    result = 'Por favor ingresa una expresión válida.';
+                    error = true;
+                }
+            } catch (e) {
+                result = 'Error: Expresión no válida.';
+                error = true;
+            }
+
+            resultElement.textContent = result;
+            resultElement.classList.toggle('error', error);
+        }
+    </script>
+
+</body>
+</html>
